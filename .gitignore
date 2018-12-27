@@ -30,3 +30,6 @@ api/archiver/changes/bitfield
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# live share chat
+chat.txt
