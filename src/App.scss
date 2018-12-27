@@ -1,0 +1,14 @@
+.App {
+  .viewport-container {
+    width:100%;
+    background: linear-gradient( rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.0) ), url('./images/biobricks-bkg.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: calc(100vh - 60px - 60px - 5px);
+  }
+  .text-lg {
+    font-size: 1.3em;
+  }
+
+}
