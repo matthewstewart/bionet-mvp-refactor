@@ -89,7 +89,7 @@ module.exports = function(router, passport) {
 
 };
 
-
+/* This can be refactored to validation module */
 function validateSignupForm(payload) {
   const errors = {};
   let isFormValid = true;

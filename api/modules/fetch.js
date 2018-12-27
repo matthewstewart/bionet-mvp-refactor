@@ -45,7 +45,10 @@ const mongoFetch = {
           path: 'creator',
           select: '_id username'
         });  
-        break;    
+        break; 
+      case User:
+        results = await Model.find().select({ password: 0, email: 0, name: 0, settings: 0});  
+        break;      
       default:
         results = null;
     }
@@ -98,7 +101,10 @@ const mongoFetch = {
             path: 'creator',
             select: '_id username'
           });  
-          break;      
+          break;  
+        case User:
+          result = await Model.findOne({_id: id}).select({ password: 0, email: 0, name: 0, settings: 0});  
+          break;       
         default:
           result = null;
       }
