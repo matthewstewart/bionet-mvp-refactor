@@ -19,6 +19,9 @@ import './App.scss';
 // js modules - contain logic for use within components
 import Api from './modules/Api';
 
+// helper components
+import Debug from './components/Debug';
+
 // layout components - header, grid, footer components
 import Navigation from './components/Navigation';
 
@@ -32,7 +35,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      debuggingMode: true,
+      debuggingMode: false,
       isReady: false, // the component tree renders from child up, this is useful for passing back down that the entire component tree is loaded
       isLoggedIn: false, // is the user logged in
       currentUser: {}, // the current user record
@@ -40,6 +43,11 @@ class App extends Component {
       lab: {} // a test of getOne
     };
     this.getData = this.getData.bind(this); // each component has a 'parent' async function, getData(), loaded on componentDidMount/componentDidUpdate to change the state
+    this.toggleDebuggingMode = this.toggleDebuggingMode.bind(this);
+  }
+
+  toggleDebuggingMode() {
+    this.setState({ debuggingMode: !this.state.debuggingMode });
   }
 
   // async function returning data required for this component
@@ -95,6 +103,8 @@ class App extends Component {
           isReady={this.state.isReady} 
           isLoggedIn={this.state.isLoggedIn}
           currentUser={this.state.currentUser}
+          debuggingMode={this.state.debuggingMode}
+          toggleDebuggingMode={this.toggleDebuggingMode}
         />
         <main className="viewport-container">
           <Switch>
@@ -102,6 +112,13 @@ class App extends Component {
             <Route exact path="/about" component={ (props) => (<About {...this.state} />) }/>
             <Route exact path="/" render={ (props) => (<Landing {...this.state} />) } />
           </Switch>
+          {(this.state.debuggingMode) ? (
+            <Debug 
+              componentName="App"
+              componentProps={this.props}
+              componentState={this.state}
+            />
+          ) : null }
         </main>
       </div>
     );

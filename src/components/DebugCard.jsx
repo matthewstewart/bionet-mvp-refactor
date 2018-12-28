@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardHeader, CardBody, CardTitle } from '../components/Bootstrap';
 
-class Debug extends Component {
+class DebugCard extends Component {
   
   render() {
     const title = this.props.title ? this.props.title : "Debug Console";
@@ -21,4 +21,4 @@ class Debug extends Component {
 
 }
 
-export default Debug;
+export default DebugCard;

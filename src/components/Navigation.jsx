@@ -13,8 +13,9 @@ import { Navbar, NavbarBrand, NavbarToggle, NavbarNav, NavbarDropdown, NavbarDro
 // logo for navbar brand
 import logo from '../images/bionet-logo.png';
 
-class Navigation extends Component {
 
+class Navigation extends Component {
+      
   render() {
     // is the app / entire component tree finished loading
     const appReady = this.props.isReady;
@@ -26,6 +27,7 @@ class Navigation extends Component {
     // const isLoggedIn = false;
     
     // the current user record returned from App.componentDidMount.getData
+
     const currentUser = this.props.currentUser;
     
     // the label for the user dropdown link
@@ -72,7 +74,7 @@ class Navigation extends Component {
           >
             {userDropdownLinks}
           </NavbarDropdown>
-       
+
           <NavbarDropdown 
             id="info-dropdown" 
             label="Info"
@@ -82,6 +84,14 @@ class Navigation extends Component {
             <NavbarDropdownLink to="/about">
               <i className="mdi text-lg mdi-information mr-1" />About
             </NavbarDropdownLink>
+
+            <div 
+              className="dropdown-item" 
+              onClick={this.props.toggleDebuggingMode}
+            >
+              <i className="mdi text-lg mdi-bug mr-1" />
+              {this.props.debuggingMode ? "Turn Off Debug Console" : "Turn On Debug Console"}
+            </div>
 
           </NavbarDropdown>
         </NavbarNav>

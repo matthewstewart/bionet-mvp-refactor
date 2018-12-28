@@ -20,7 +20,7 @@ module.exports = function(router) {
     .catch(error => {
       let jsonResponse = {
         message: `Fail - problem creating new ${Model}`,
-        error: {},
+        error,
         data: {}
       };
       res.status(500).json(jsonResponse);

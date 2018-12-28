@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import MessageCard from '../components/MessageCard';
+import Model from '../components/Model';
 import Debug from '../components/Debug';
-import { ContainerFluid, Row, Column, Card, CardHeader, CardTitle, CardBody, CardText } from '../components/Bootstrap';
+import { ContainerFluid, Row, Column } from '../components/Bootstrap';
 
 class Landing extends Component {
   
@@ -11,19 +13,16 @@ class Landing extends Component {
         <ContainerFluid>
           <Row>
             <Column col="12" colLg="4">
-              <Card className="Message">
-                <CardHeader dark>
-                  <CardTitle>
-                    <i className="mdi mdi-home mr-1"/>Landing
-                  </CardTitle>
-                </CardHeader>
-                <CardBody>
-                  <CardText>
-                    This is the landing page found at ./src/pages/Landing.jsx
-                  </CardText>
-                </CardBody>
-              </Card>
-            </Column>  
+              <MessageCard title="Landing" iconClass="home">
+                This is the landing page found at ./src/pages/Landing.jsx
+              </MessageCard>
+            </Column> 
+            <Column col="12" colLg="8">
+              <Model 
+                name="Lab" 
+                iconClass="teach"
+              />            
+            </Column> 
           </Row>
         </ContainerFluid>
 
