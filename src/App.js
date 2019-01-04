@@ -88,6 +88,7 @@ class App extends Component {
       this.setState(result);
     }).catch((error) => {
       console.error(error);
+      this.logout();
     });
   }
 
@@ -122,10 +123,8 @@ class App extends Component {
                 <Route exact path="/about" render={ (props) => ( <About {...this.state} />) }/>
                 <Route exact path="/" render={ (props) => ( <Landing {...this.state} setSelectedRecord={this.setSelectedRecord}/>) } />
               </Switch>
-            </>  
-          ) : (
-            <ErrorPage {...this.state} />
-          )}
+            </>
+          ) : (<ErrorPage />)}  
         </main>
       </div>
     );
