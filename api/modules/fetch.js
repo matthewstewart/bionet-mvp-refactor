@@ -9,10 +9,20 @@ const mongoFetch = {
     let results;
     switch (Model) {
       case Lab:
-        results = await Model.find().populate({
+        results = await Model.find()
+        .populate({
+          path: 'createdBy',
+          select: '_id username'
+        })
+        .populate({
+          path: 'updatedBy',
+          select: '_id username'
+        })
+        .populate({
           path: 'users',
           select: '_id username'
-        }).populate({
+        })
+        .populate({
           path: 'joinRequests',
           select: '_id username'
         });
@@ -62,10 +72,20 @@ const mongoFetch = {
     if (!isTestMode) {
       switch (Model) {
         case Lab:
-          result = await Model.findOne({_id: id}).populate({
+          result = await Model.findOne({_id: id})
+          .populate({
+            path: 'createdBy',
+            select: '_id username'
+          })
+          .populate({
+            path: 'updatedBy',
+            select: '_id username'
+          })
+          .populate({
             path: 'users',
             select: '_id username'
-          }).populate({
+          })
+          .populate({
             path: 'joinRequests',
             select: '_id username'
           });

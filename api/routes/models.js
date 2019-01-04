@@ -11,6 +11,7 @@ module.exports = function(router) {
     newRecord.save()
     .then(data => {
       let jsonResponse = {
+        success: true,
         message: "Success - data retrieved from Bionet Centralized Database",
         error: {},
         data
@@ -19,6 +20,7 @@ module.exports = function(router) {
     })
     .catch(error => {
       let jsonResponse = {
+        success: false,
         message: `Fail - problem creating new ${Model}`,
         error,
         data: {}

@@ -15,7 +15,7 @@ class PanelTitle extends Component {
         title = `Delete ${this.props.title}`;
         break;
       default:
-        title = this.props.title    
+        title = "Select From Search"    
     }
     return (
       <>

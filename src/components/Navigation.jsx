@@ -4,13 +4,10 @@
 /* Used as a top navigation bar.                 */
 /*************************************************/
 
-// core react components
 import React, { Component } from 'react';
-// withRouter - enables the router props to pass into a component not inside the <main> => <Route> tree, wrapped on export
 import { withRouter } from 'react-router-dom';
-// bootstrap components
+import shortid from 'shortid';
 import { Navbar, NavbarBrand, NavbarToggle, NavbarNav, NavbarDropdown, NavbarDropdownLink, NavbarLink } from './Bootstrap';
-// logo for navbar brand
 import logo from '../images/bionet-logo.png';
 
 import LoginForm from './LoginForm';
@@ -24,20 +21,14 @@ class Navigation extends Component {
     const selectRecordExists = this.props.selectedRecord && Object.keys(this.props.selectedRecord).length > 0;
     const currentUser = this.props.currentUser;
     const userDropdownLabel = isLoggedIn && appReady ? currentUser.username : "Loading...";
-    
-    const userDropdownLinks = (
-      <>
-        {/* <NavbarDropdownLink to={`/users/${currentUser._id}`}>
-          <i className="mdi text-lg mdi-information mr-2" />Profile
-        </NavbarDropdownLink> */}
-        <button 
-          className="dropdown-item"
-          onClick={ this.props.logout }
-        >
-          <i className="mdi text-lg mdi-logout-variant mr-2"/>Logout
-        </button> 
-      </>
-    );
+
+    const labLinks = this.props.labs.map((lab) => {
+      return (
+        <NavbarDropdownLink key={shortid.generate()} to={`/labs/${lab._id}`}>
+          <i className={`mdi text-lg mdi-teach mr-1`} />{lab.name}
+        </NavbarDropdownLink>
+      );
+    });
 
     return (
       <Navbar dark className="Navigation">
@@ -47,16 +38,38 @@ class Navigation extends Component {
     
           {appReady ? (
             <>
-              {isLoggedIn ? (
+
+              {isLoggedIn && (
                 <NavbarDropdown 
                   id="user-dropdown" 
                   label={userDropdownLabel}
                   className="text-light"
                   icon="account-circle"
                 >
-                  {userDropdownLinks}
+                  <button 
+                    className="dropdown-item"
+                    onClick={ this.props.logout }
+                  >
+                    <i className="mdi text-lg mdi-logout-variant mr-2"/>Logout
+                  </button> 
                 </NavbarDropdown>
-              ) : (
+              )} 
+
+              <NavbarDropdown 
+                id="labs-dropdown" 
+                label="Labs"
+                className="text-light"
+                icon="teach"
+              > 
+                {labLinks}
+                { isLoggedIn && (
+                  <NavbarDropdownLink to="/labs/new">
+                    <i className="mdi text-lg mdi-plus mr-1" />New Lab
+                  </NavbarDropdownLink>
+                )}
+              </NavbarDropdown>  
+
+              { !isLoggedIn && (
                 <>
                   <NavbarDropdown 
                     id="signup-dropdown" 
@@ -81,8 +94,7 @@ class Navigation extends Component {
                 </>
               )}
 
-
-              {selectRecordExists ? (
+              {isLoggedIn && selectRecordExists ? (
                 <NavbarDropdown 
                   id="record-dropdown" 
                   label={this.props.selectedRecord.name}

@@ -16,8 +16,8 @@ import Navigation from './components/Navigation';
 import Landing from './pages/Landing';
 import About from './pages/About';
 import UserProfile from './pages/UserProfile';
+import NewLab from './pages/NewLab';
 import Sandbox from './pages/Sandbox';
-import ErrorPage from './pages/ErrorPage';
 import Footer from './components/Footer';
 
 class App extends Component {
@@ -25,16 +25,25 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadSuccess: false,
-      error: {},
       appReady: false,
       debuggingMode: false,
       isLoggedIn: false,
       currentUser: {},
+      labs: [],
+      containers: [],
+      physicals: [],
+      virtuals: [],
+      records: [],
       selectedRecord: {},
       action: "View",
-      view: "Graph"
+      modelType: "",
+      view: "Grid"
     };
+    this.setRecords = this.setRecords.bind(this);
+    this.setLabs = this.setLabs.bind(this);
+    this.setContainers = this.setContainers.bind(this);
+    this.setPhysicals = this.setPhysicals.bind(this);
+    this.setVirtuals = this.setVirtuals.bind(this);
     this.logout = this.logout.bind(this);
     this.setSelectedRecord = this.setSelectedRecord.bind(this);
     this.setAction = this.setAction.bind(this);
@@ -44,6 +53,12 @@ class App extends Component {
     this.refreshAppState = this.refreshAppState.bind(this);
   }
 
+  setRecords(records) { this.setState({records}) }
+  setLabs(labs) { this.setState({labs}) }
+  setContainers(containers) { this.setState({containers}) }
+  setPhysicals(physicals) { this.setState({physicals}) }
+  setVirtuals(virtuals) { this.setState({virtuals}) }
+
   logout() {
     Api.logoutCurrentUser()
     .then(() => {
@@ -52,7 +67,44 @@ class App extends Component {
   }
 
   setSelectedRecord(selectedRecord) {
-    this.setState({ selectedRecord })
+    const selectedRecordExists = selectedRecord && Object.keys(selectedRecord).length > 0;
+    if (selectedRecordExists) {
+      const recordType = selectedRecord.type;
+      let endpoint;
+      switch (recordType) {
+        case 'Lab':
+          endpoint = 'labs';
+          break;
+        case 'Container':
+          endpoint = 'containers';
+          break;
+        case 'Physical':
+          endpoint = 'physicals';
+          break;
+        case 'Virtual':
+          endpoint = 'virtuals';
+          break;
+        default:
+          // nothing  
+      }
+      selectedRecord['endpoint'] = endpoint;
+      Api.get(`${endpoint}/${selectedRecord._id}`)
+      .then((result) => {
+        let fullSelectedRecord = result.data;
+        fullSelectedRecord['icon'] = selectedRecord.icon;
+        fullSelectedRecord['type'] = selectedRecord.type;
+        fullSelectedRecord['endpoint'] = endpoint;
+        this.setState({ 
+          selectedRecord: fullSelectedRecord,
+          modelType: fullSelectedRecord.type || "" 
+        });
+      });
+    } else {
+      this.setState({
+        selectedRecord: {},
+        modelType: ""
+      });
+    }  
   }
 
   setAction(newAction) {
@@ -83,7 +135,6 @@ class App extends Component {
     .then((result) => {
       this.state.debuggingMode && console.log('App.componentDidMount.getData.result', result);
       result['appReady'] = true;
-      result['loadSuccess'] = true;
       this.setState(result);
     }).catch((error) => {
       console.error(error);
@@ -97,7 +148,6 @@ class App extends Component {
   }
 
   render() {
-    const loadSuccess = this.state.loadSuccess === true;
     return (
       <div className="App">
         <Navigation
@@ -105,25 +155,36 @@ class App extends Component {
           refreshAppState={this.refreshAppState}
           isLoggedIn={this.state.isLoggedIn}
           currentUser={this.state.currentUser}
+          labs={this.state.labs}
           logout={this.logout}
           debuggingMode={this.state.debuggingMode}
           selectedRecord={this.state.selectedRecord}
           toggleDebuggingMode={this.toggleDebuggingMode}
         />
         <main className="viewport-container">
-          {loadSuccess ? (
-            <>
-              <Switch>
-                <Route exact path="/sandbox" render={ (props) => ( <Sandbox {...this.state} />) } />
-              </Switch>
-              
-              <Switch>
-                <Route path="/users/:userId" render={ (props) => ( <UserProfile {...this.state} />) }/>
-                <Route exact path="/about" render={ (props) => ( <About {...this.state} />) }/>
-                <Route exact path="/" render={ (props) => ( <Landing {...this.state} setSelectedRecord={this.setSelectedRecord}/>) } />
-              </Switch>
-            </>
-          ) : (<ErrorPage />)}  
+          <>
+            <Switch>
+              <Route exact path="/labs/new" render={ (props) => ( <NewLab {...this.state} />) }/>
+              <Route path="/users/:userId" render={ (props) => ( <UserProfile {...this.state} />) }/>
+              <Route exact path="/about" render={ (props) => ( <About {...this.state} />) }/>
+              <Route exact path="/sandbox" render={ (props) => ( <Sandbox {...this.state} />) } />
+              <Route 
+                exact 
+                path="/" 
+                render={ (props) => (
+                  <Landing 
+                    {...this.state} 
+                    setSelectedRecord={this.setSelectedRecord}
+                    setRecords={this.setRecords}
+                    setLabs={this.setLabs}
+                    setContainers={this.setContainers}
+                    setPhysicals={this.setPhysicals}
+                    setVirtuals={this.setVirtuals}
+                  />
+                )} 
+              />
+            </Switch>
+          </>
         </main>
         <Footer />
       </div>

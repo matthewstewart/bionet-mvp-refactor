@@ -7,7 +7,7 @@ class GridPanel extends Component {
   render() {
     // const appReady = this.props.appReady === true;
     return (
-      <Card className="GridPanel">
+      <Card className="GridPanel mt-3">
         <CardHeader dark>
           <CardTitle>
             <PanelTitle 

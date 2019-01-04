@@ -89,6 +89,25 @@ async function get(endpoint) {
   }
 }
 
-let api = { getCurrentUser, get, loginCurrentUser, logoutCurrentUser, login, signup };
+async function post(endpoint, form) {
+  try {  
+    let request = new Request(`${Config.apiEndpoint}/${endpoint}`, {
+      method: 'POST',
+      body: JSON.stringify(form),
+      headers: new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Auth.getToken()}`
+      })
+    });
+    let response = await fetch(request);
+    let result = response.json();
+    return result;
+  } catch (error) {
+    console.log('Api.post', error);
+  } 
+}
+
+let api = { getCurrentUser, get, post, loginCurrentUser, logoutCurrentUser, login, signup };
 
 export default api;

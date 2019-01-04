@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardHeader, CardTitle, CardBody, CardText } from '../components/Bootstrap';
 
 import PanelTitle from '../components/PanelTitle';
+import Search from '../components/Search';
 // import ModelList from './ModelList';
 // import ModelProfile from './ModelProfile';
 // import ModelNew from './ModelNew';
@@ -12,28 +13,48 @@ class DataPanel extends Component {
   
   render() {
     const appReady = this.props.appReady === true;
+    const hasSelectedRecord = this.props.selectedRecord && Object.keys(this.props.selectedRecord).length > 0;
     return (
       <Card className="DataPanel mt-3">
-        <CardHeader dark>
           { appReady ? (
-            <CardTitle>
-              <PanelTitle 
-                icon={this.props.selectedRecord.icon} 
-                title={this.props.selectedRecord.name}
-                view={this.props.view}
-                action={this.props.action}
-              />              
-            </CardTitle>
+            <>
+              {hasSelectedRecord ? (
+                <CardHeader dark>
+                  <CardTitle>
+                    <PanelTitle 
+                      icon={this.props.selectedRecord.icon} 
+                      title={this.props.selectedRecord.name}
+                      view={this.props.view}
+                      action={this.props.action}
+                    />              
+                  </CardTitle>
+                </CardHeader>
+              ) : (
+                <CardHeader dark>
+                  <CardTitle>
+                    <PanelTitle 
+                      icon={'search-web'} 
+                      title={'Search Bionet'}
+                      view={this.props.view}
+                      action={this.props.action}
+                    />              
+                  </CardTitle>
+                </CardHeader>                
+              )}  
+            </>  
           ) : (
-            <CardTitle>
-              {/* Can potentially be replaced with PanelTitleLoading / PanelTitle Conditional to include fancy animation for loading in a panel title. */}
-              <PanelTitle icon="timer-sand" title="Loading..."/>
-            </CardTitle>
+            <CardHeader dark>
+              <CardTitle>
+                <PanelTitle icon="timer-sand" title="Loading..."/>
+              </CardTitle>
+            </CardHeader>
           )}
-        </CardHeader>
-        <CardBody>
-          <CardText>This Panel will display one of many views according to app.state.action.</CardText>
-        </CardBody>
+        <Search {...this.props}/>
+        
+        {hasSelectedRecord && (
+          <CardBody><pre>{JSON.stringify(this.props.selectedRecord, null, 2)}</pre></CardBody>
+        )}
+        
       </Card>
     );
   }

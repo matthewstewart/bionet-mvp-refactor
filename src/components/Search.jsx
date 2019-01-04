@@ -19,36 +19,48 @@ class Search extends Component {
     try {
       let records = [];
 
-      let labs = await Api.get("labs");
-      for(let i = 0; i < labs.data.length; i++){
-        labs.data[i]['type'] = 'Lab';
-        labs.data[i]['icon'] = 'teach';
+      let labsResponse = await Api.get("labs");
+      for(let i = 0; i < labsResponse.data.length; i++){
+        labsResponse.data[i]['type'] = 'Lab';
+        labsResponse.data[i]['icon'] = 'teach';
       }
-      records = records.concat(labs.data);
+      const labs = labsResponse.data;
+      records = records.concat(labsResponse.data);
 
-      let containers = await Api.get("containers");
+      let containersResponse = await Api.get("containers");
   
-      for(let i = 0; i < containers.data.length; i++){
-        containers.data[i]['type'] = 'Container';
-        containers.data[i]['icon'] = 'grid';
+      for(let i = 0; i < containersResponse.data.length; i++){
+        containersResponse.data[i]['type'] = 'Container';
+        containersResponse.data[i]['icon'] = 'grid';
       }
-      records = records.concat(containers.data);
+      const containers = containersResponse.data;
+      records = records.concat(containersResponse.data);
 
-      let physicals= await Api.get("physicals");
-      for(let i = 0; i < physicals.data.length; i++){
-        physicals.data[i]['type'] = 'Physical';
-        physicals.data[i]['icon'] = 'flask';
+      let physicalsResponse = await Api.get("physicals");
+      for(let i = 0; i < physicalsResponse.data.length; i++){
+        physicalsResponse.data[i]['type'] = 'Physical';
+        physicalsResponse.data[i]['icon'] = 'flask';
       }
-      records = records.concat(physicals.data);
+      const physicals = physicalsResponse.data;
+      records = records.concat(physicalsResponse.data);
 
-      let virtuals = await Api.get("virtuals");
-      for(let i = 0; i < virtuals.data.length; i++){
-        virtuals.data[i]['type'] = 'Virtual';
-        virtuals.data[i]['icon'] = 'dna';
+      let virtualsResponse = await Api.get("virtuals");
+      for(let i = 0; i < virtualsResponse.data.length; i++){
+        virtualsResponse.data[i]['type'] = 'Virtual';
+        virtualsResponse.data[i]['icon'] = 'dna';
       }
-      records = records.concat(virtuals.data);
-      //console.log('records', records)
-      return records;     
+      const virtuals = virtualsResponse.data;
+      records = records.concat(virtualsResponse.data);
+
+      const result = {
+        labs,
+        containers,
+        physicals,
+        virtuals,
+        records
+      };
+
+      return result;     
     } catch (error) {
       console.log('Search.getData', error);
     }
@@ -62,9 +74,12 @@ class Search extends Component {
 
   componentDidMount() {
     this.getData()
-    .then((records) => {
-      //console.log('result', records);
-      this.setState({ records });
+    .then((result) => {
+      this.props.setRecords(result.records);
+      this.props.setLabs(result.labs);
+      this.props.setContainers(result.containers);
+      this.props.setPhysicals(result.physicals);
+      this.props.setVirtuals(result.virtuals);
     })
     .catch((error) => {
       console.log('Search.componentDidMount.getData.error', error);
@@ -72,11 +87,8 @@ class Search extends Component {
   }
 
   render() {
-    const appReady = this.props.appReady === true;
-    
     return (
       <div className="Search">
-        
         <Typeahead
           labelKey={(option) => {
             let isLab = option.type === 'Lab';
@@ -87,12 +99,11 @@ class Search extends Component {
             return label; 
           }}
           name="search"
-          placeholder={appReady ? "Search Bionet" : "Search..."}
+          placeholder="<enter search here>"
           className="border-0"
-          options={this.state.records}
+          options={this.props.records}
           onChange={(selected) => { this.onChange(selected) }}
         />
-
       </div>
     );
   }
@@ -100,7 +111,3 @@ class Search extends Component {
 
 export default Search;
 
-      // <form className="Search form-inline my-2 my-lg-0">
-      //   <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-      //   <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      // </form>
