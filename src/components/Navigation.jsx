@@ -57,7 +57,7 @@ class Navigation extends Component {
       <Navbar dark className="Navigation">
         <NavbarBrand imgSrc={logo} imgAlt="BioNet Logo" width="40"/>
         <NavbarToggle target="navbarNav" />
-        <NavbarNav right id="navbarNav" className="mr-spaced">
+        <NavbarNav right id="navbarNav" style={{'margin-right': '30px'}}>
     
           {appReady ? (
             <>

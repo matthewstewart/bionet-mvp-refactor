@@ -18,6 +18,12 @@ $darkest: rgb(0, 0, 0);
   background-color: $dark !important;
 }
 
+#navbarNav {
+  @media screen and (min-width: $col-lg) {
+    margin-right: 70px;
+  }
+}
+
 .navbar-nav {
   
   &.mr-spaced {
