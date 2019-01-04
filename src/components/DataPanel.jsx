@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardBody, CardText, Navbar, NavbarBrand, N
 
 import PanelTitle from '../components/PanelTitle';
 import Search from '../components/Search';
-import NewLab from '../pages/NewLab';
+import NewLabForm from '../components/NewLabForm';
 import FadeIn from 'react-fade-in';
 // import ModelList from './ModelList';
 // import ModelProfile from './ModelProfile';
@@ -30,8 +30,6 @@ class DataPanel extends Component {
       <Card className="DataPanel mt-3">
         { appReady ? (
           <>
-            
-
             {isViewMode && (
               <>
                 {hasSelectedRecord ? (
@@ -119,7 +117,7 @@ class DataPanel extends Component {
                   </NavbarBrand>
                 </Navbar>             
                 <CardBody>
-                  {this.props.modelType === 'Lab' && <NewLab {...this.props} />}
+                  {this.props.modelType === 'Lab' && <NewLabForm {...this.props} />}
                   {this.props.modelType === 'Container' && (
                     <FadeIn>
                       <Row>

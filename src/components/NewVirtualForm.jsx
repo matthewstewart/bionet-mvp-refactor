@@ -3,7 +3,7 @@ import Api from '../modules/Api';
 import { Row, Column, Form, InputText, InputTextArea, InputNumber, Button, ButtonGroup } from '../components/Bootstrap';
 import FadeIn from 'react-fade-in';
 
-class NewLabForm extends Component {
+class NewVirtualForm extends Component {
 
   constructor(props) {
     super(props);
@@ -171,4 +171,4 @@ class NewLabForm extends Component {
 
 }
 
-export default NewLabForm;
+export default NewVirtualForm;

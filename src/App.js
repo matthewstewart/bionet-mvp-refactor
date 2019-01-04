@@ -16,7 +16,6 @@ import Navigation from './components/Navigation';
 import Landing from './pages/Landing';
 import About from './pages/About';
 import UserProfile from './pages/UserProfile';
-import NewLab from './pages/NewLab';
 import Sandbox from './pages/Sandbox';
 import Footer from './components/Footer';
 
@@ -178,7 +177,6 @@ class App extends Component {
         <main className="viewport-container">
           <>
             <Switch>
-              <Route exact path="/labs/new" render={ (props) => ( <NewLab {...this.state} />) }/>
               <Route path="/users/:userId" render={ (props) => ( <UserProfile {...this.state} />) }/>
               <Route exact path="/about" render={ (props) => ( <About {...this.state} />) }/>
               <Route exact path="/sandbox" render={ (props) => ( <Sandbox {...this.state} />) } />

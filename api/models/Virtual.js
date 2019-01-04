@@ -4,9 +4,10 @@ const mongoose = require("mongoose");
 
 // Arbitrary virtual
 const modelSchema = mongoose.Schema({
-  creator: { type: String, ref: "User", required: true },
-  createdAt: { type: String, default: new Date() },
-  updatedAt: { type: String, default: new Date() },
+  createdAt    : { type: String, default: new Date() },
+  createdBy    : { type: String, ref: "User", required: true },
+  updatedAt    : { type: String, default: new Date() },
+  updatedBy    : { type: String, ref: "User", required: true },
   name: { type: String, unique: true, required: true },
   description: String,
   isAvailable: { type: Boolean, default: false },

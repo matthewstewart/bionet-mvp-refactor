@@ -28,31 +28,51 @@ const mongoFetch = {
         });
         break;
       case Container:
-        results = await Model.find().populate({
+        results = await Model.find()
+        .populate({
           path: 'parent',
           select: '_id name'
-        }).populate({
-          path: 'creator',
+        })
+        .populate({
+          path: 'createdBy',
           select: '_id username'
-        }).populate({
+        })
+        .populate({
+          path: 'updatedBy',
+          select: '_id username'
+        })  
+        .populate({
           path: 'lab',
           select: '_id name'
         });
       case Physical:
-        results = await Model.find().populate({
+        results = await Model.find()
+        .populate({
           path: 'parent',
           select: '_id name'
-        }).populate({
-          path: 'creator',
+        })
+        .populate({
+          path: 'createdBy',
           select: '_id username'
-        }).populate({
+        })
+        .populate({
+          path: 'updatedBy',
+          select: '_id username'
+        })
+        .populate({
           path: 'lab',
           select: '_id name'
-        }).populate('virtual');  
+        })
+        .populate('virtual');  
         break; 
       case Virtual:
-        results = await Model.find().populate({
-          path: 'creator',
+        results = await Model.find()
+        .populate({
+          path: 'createdBy',
+          select: '_id username'
+        })
+        .populate({
+          path: 'updatedBy',
           select: '_id username'
         });  
         break; 
@@ -95,10 +115,16 @@ const mongoFetch = {
           result = await Model.findOne({_id: id}).populate({
             path: 'parent',
             select: '_id name'
-          }).populate({
-            path: 'creator',
+          })
+          .populate({
+            path: 'createdBy',
             select: '_id username'
-          }).populate({
+          })
+          .populate({
+            path: 'updatedBy',
+            select: '_id username'
+          })
+          .populate({
             path: 'lab',
             select: '_id name'
           });
@@ -108,17 +134,29 @@ const mongoFetch = {
           result = await Model.findOne({_id: id}).populate({
             path: 'parent',
             select: '_id name'
-          }).populate({
-            path: 'creator',
+          })
+          .populate({
+            path: 'createdBy',
             select: '_id username'
-          }).populate({
+          })
+          .populate({
+            path: 'updatedBy',
+            select: '_id username'
+          })
+          .populate({
             path: 'lab',
             select: '_id name'
-          }).populate('virtual');  
+          })
+          .populate('virtual');  
           break;  
         case Virtual:
-          result = await Model.findOne({_id: id}).populate({
-            path: 'creator',
+          result = await Model.findOne({_id: id})
+          .populate({
+            path: 'createdBy',
+            select: '_id username'
+          })
+          .populate({
+            path: 'updatedBy',
             select: '_id username'
           });  
           break;  
@@ -142,40 +180,70 @@ async function getAll(Model) {
   let results;
   switch (Model) {
     case Lab:
-      results = await Model.find().populate({
+      results = await Model.find()
+      .populate({
+        path: 'createdBy',
+        select: '_id username'
+      })
+      .populate({
+        path: 'updatedBy',
+        select: '_id username'
+      })  
+      .populate({
         path: 'users',
         select: '_id username'
-      }).populate({
+      })
+      .populate({
         path: 'joinRequests',
         select: '_id username'
       });
       break;
     case Container:
-      results = await Model.find().populate({
+      results = await Model.find()
+      .populate({
         path: 'parent',
         select: '_id name'
-      }).populate({
-        path: 'creator',
+      })
+      .populate({
+        path: 'createdBy',
         select: '_id username'
-      }).populate({
+      })
+      .populate({
+        path: 'updatedBy',
+        select: '_id username'
+      })
+      .populate({
         path: 'lab',
         select: '_id name'
       });
     case Physical:
-      results = await Model.find().populate({
+      results = await Model.find()
+      .populate({
         path: 'parent',
         select: '_id name'
-      }).populate({
-        path: 'creator',
+      })
+      .populate({
+        path: 'createdBy',
         select: '_id username'
-      }).populate({
+      })
+      .populate({
+        path: 'updatedBy',
+        select: '_id username'
+      })
+      .populate({
         path: 'lab',
         select: '_id name'
-      }).populate('virtual');  
+      })
+      .populate('virtual');  
       break; 
     case Virtual:
-      results = await Model.find().populate({
-        path: 'creator',
+      results = await Model.find()
+      .populate({
+        path: 'createdBy',
+        select: '_id username'
+      })
+      .populate({
+        path: 'updatedBy',
         select: '_id username'
       });  
       break;    
