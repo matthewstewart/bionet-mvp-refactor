@@ -12,7 +12,6 @@ const modelSchema = mongoose.Schema({
   children     : Object,
   users        : [{ type: String, ref: "User"}],
   joinRequests : [{ type: String, ref: "User"}],
-  datName      : { type: String, default: "" },
   datKey       : { type: String, default: "" }
 });
 

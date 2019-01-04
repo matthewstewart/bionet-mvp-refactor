@@ -16,8 +16,7 @@ const modelSchema = mongoose.Schema({
   fgSubmitted: { type: Boolean, default: false },
   fgStage: { type: Number, default: 0 },
   category: { type: String, required: true },
-  datName: String,
-  datHash: String
+  datKey: String
 });
 
 module.exports = mongoose.model("Virtual", modelSchema);

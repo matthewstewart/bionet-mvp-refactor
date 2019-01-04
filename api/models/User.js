@@ -31,7 +31,8 @@ const userSchema = mongoose.Schema({
 				members: { type: Boolean, default: true }
 			}
 		}
-	}
+	},
+	datKey: String
 });
 
 userSchema.methods.comparePassword = function(password, callback) {

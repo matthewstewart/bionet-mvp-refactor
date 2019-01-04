@@ -41,3 +41,7 @@ $darkest: rgb(0, 0, 0);
 .card {
   border-color: $darker;
 }
+
+.card-img-top {
+  height: 200px !important;
+}
