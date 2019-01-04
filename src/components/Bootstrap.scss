@@ -19,9 +19,12 @@ $darkest: rgb(0, 0, 0);
 }
 
 .navbar-nav {
-  @media screen and (min-width: $col-lg) {
-    margin-right: 70px;
-  }
+  
+  &.mr-spaced {
+    @media screen and (min-width: $col-lg) {
+      margin-right: 70px;
+    }
+  }  
   .dropdown-menu {
     background-color: $dark !important;
     .dropdown-item { 

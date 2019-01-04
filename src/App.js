@@ -47,6 +47,7 @@ class App extends Component {
     this.logout = this.logout.bind(this);
     this.setSelectedRecord = this.setSelectedRecord.bind(this);
     this.setAction = this.setAction.bind(this);
+    this.onSetAction = this.onSetAction.bind(this);
     this.setView = this.setView.bind(this);
     this.toggleDebuggingMode = this.toggleDebuggingMode.bind(this);
     this.getData = this.getData.bind(this);
@@ -98,7 +99,8 @@ class App extends Component {
         fullSelectedRecord['endpoint'] = endpoint;
         this.setState({ 
           selectedRecord: fullSelectedRecord,
-          modelType: fullSelectedRecord.type || "" 
+          modelType: fullSelectedRecord.type || "",
+          action: 'View'
         });
       });
     } else {
@@ -111,6 +113,13 @@ class App extends Component {
 
   setAction(newAction, modelType) {
     this.setState({ action: newAction, modelType });
+  }
+
+  onSetAction(e) {
+    e.preventDefault();
+    const action = e.target.getAttribute('action');
+    const model = e.target.getAttribute('model');
+    this.setAction(action, model);
   }
 
   setView(newView) {
@@ -163,6 +172,8 @@ class App extends Component {
           selectedRecord={this.state.selectedRecord}
           toggleDebuggingMode={this.toggleDebuggingMode}
           setSelectedRecord={this.setSelectedRecord}
+          setAction={this.setAction}
+          onSetAction={this.onSetAction}
         />
         <main className="viewport-container">
           <>
@@ -183,6 +194,8 @@ class App extends Component {
                     setContainers={this.setContainers}
                     setPhysicals={this.setPhysicals}
                     setVirtuals={this.setVirtuals}
+                    setAction={this.setAction}
+                    onSetAction={this.onSetAction}
                   />
                 )} 
               />

@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import shortid from 'shortid';
-import { Navbar, NavbarBrand, NavbarToggle, NavbarNav, NavbarDropdown, NavbarDropdownLink, NavbarLink, Button } from './Bootstrap';
+import { Navbar, NavbarBrand, NavbarToggle, NavbarNav, NavbarDropdown, NavbarDropdownLink, NavbarLink } from './Bootstrap';
 import logo from '../images/bionet-logo.png';
 
 import LoginForm from './LoginForm';
@@ -23,9 +23,13 @@ class Navigation extends Component {
 
   onLabLinkClick(e) {
     e.preventDefault();
+    //console.log('click')
     let labs = this.props.labs;
+    //console.log(labs)
     let labIndex = e.target.getAttribute('index');
+    //console.log(labIndex);
     let lab = labs[Number(labIndex)];
+    //console.log(lab)
     this.props.setSelectedRecord(lab);
   }
 
@@ -38,14 +42,14 @@ class Navigation extends Component {
 
     const labLinks = this.props.labs.map((lab, labIndex) => {
       return (
-        <Button 
+        <button 
           key={shortid.generate()}
           className="dropdown-item" 
           onClick={this.onLabLinkClick} 
           index={labIndex}
         >
           <i className={`mdi text-lg mdi-teach mr-1`} index={labIndex}/>{lab.name}
-        </Button>
+        </button>
       );
     });
 
@@ -53,7 +57,7 @@ class Navigation extends Component {
       <Navbar dark className="Navigation">
         <NavbarBrand imgSrc={logo} imgAlt="BioNet Logo" width="40"/>
         <NavbarToggle target="navbarNav" />
-        <NavbarNav right id="navbarNav">
+        <NavbarNav right id="navbarNav" className="mr-spaced">
     
           {appReady ? (
             <>
@@ -82,9 +86,9 @@ class Navigation extends Component {
               > 
                 {labLinks}
                 { isLoggedIn && (
-                  <NavbarDropdownLink to="/labs/new">
-                    <i className="mdi text-lg mdi-plus mr-1" />New Lab
-                  </NavbarDropdownLink>
+                  <button className="dropdown-item" onClick={this.props.onSetAction} action="New" model="Lab">
+                    <i className="mdi text-lg mdi-plus mr-1" action="New" model="Lab"/>New Lab
+                  </button>
                 )}
               </NavbarDropdown>  
 

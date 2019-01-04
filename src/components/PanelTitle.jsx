@@ -14,6 +14,9 @@ class PanelTitle extends Component {
       case 'Delete':
         title = `Delete ${this.props.title}`;
         break;
+      case 'New':
+        title = `New ${this.props.title}`;
+        break;  
       default:
         title = "Select From Search"    
     }

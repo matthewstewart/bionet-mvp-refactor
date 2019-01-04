@@ -67,8 +67,7 @@ class NewLabForm extends Component {
             <Button
               className="mt-3"
               color="secondary"
-              link
-              to="/"
+              onClick={this.props.onCancel}
             >
               <i className="mdi mdi-cancel mr-1" />Cancel
             </Button>

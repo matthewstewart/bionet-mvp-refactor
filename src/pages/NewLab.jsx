@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import Api from '../modules/Api';
-import { ContainerFluid, Row, Column, Card, CardHeader, CardTitle, CardBody } from '../components/Bootstrap';
+import { Row, Column } from '../components/Bootstrap';
 import FadeIn from 'react-fade-in';
 
 import NewLabForm from '../components/NewLabForm';
@@ -35,6 +35,7 @@ class NewLab extends Component {
     };
     this.onInputChange = this.onInputChange.bind(this);
     this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
 
   onInputChange(e) {
@@ -47,6 +48,10 @@ class NewLab extends Component {
     this.setState({form});
   }
 
+  onCancel(e) {
+    e.preventDefault();
+    this.props.setAction('View', 'Labs');
+  }
 
   onFormSubmit(e) {
     e.preventDefault();
@@ -64,7 +69,7 @@ class NewLab extends Component {
       .then((result) => {
         console.log('NewLab.onFormSubmit.Api.post.result', result);
         if (result.success) {
-          this.setState({ redirect: true });
+          //this.setState({ redirect: true });
         } else {
           // form.username = "";
           // form.password = "";
@@ -92,40 +97,24 @@ class NewLab extends Component {
     return (
       
       <div className="NewLab">
-        { appReady ? (  
+        { appReady && (  
           <FadeIn>
-            <ContainerFluid>
-              <Row className="justify-content-lg-center">
-                <Column col="12" colLg="6">
-                  <Card className="mt-3">
-                    <CardHeader dark>
-                      <CardTitle>
-                        <i className="mdi mdi-teach mr-2" />New Lab
-                      </CardTitle>
-                    </CardHeader>
-                    <CardBody>
-                      <Row>
-                        <Column col="12" colLg="6">
-                          <NewLabForm 
-                            {...this.props} 
-                            {...this.state} 
-                            onInputChange={this.onInputChange} 
-                            onFormSubmit={this.onFormSubmit} 
-                          />
-                        </Column>
-                        <Column col="12" colLg="6">
-                          <h5 className="">Lab Preview</h5>
-                          
-                        </Column>
-                      </Row>
-                    </CardBody>
-                  </Card>                  
-                </Column>
-              </Row>
-            </ContainerFluid>
+            <Row>
+              <Column col="12" colLg="6">
+                <NewLabForm 
+                  {...this.props} 
+                  {...this.state} 
+                  onInputChange={this.onInputChange} 
+                  onFormSubmit={this.onFormSubmit}
+                  onCancel={this.onCancel} 
+                />
+              </Column>
+              <Column col="12" colMd="12" colLg="6">
+                <h5 className="">Lab Preview</h5>
+                
+              </Column>
+            </Row>
           </FadeIn>     
-        ) : (
-          <div className="page-loading"></div>
         )}  
         
       </div>

@@ -89,7 +89,7 @@ const mongoFetch = {
             path: 'joinRequests',
             select: '_id username'
           });
-          result['children'] = await getChildren(result, allContainers, allPhysicals);
+          result['children'] = await getChildren(result, allContainers, allPhysicals, 0, 0);
           break;
         case Container:
           result = await Model.findOne({_id: id}).populate({
@@ -102,7 +102,7 @@ const mongoFetch = {
             path: 'lab',
             select: '_id name'
           });
-          result['children'] = await getChildren(result, allContainers, allPhysicals);
+          result['children'] = await getChildren(result, allContainers, allPhysicals, 0, 0);
           break;  
         case Physical:
           result = await Model.findOne({_id: id}).populate({
@@ -185,8 +185,9 @@ async function getAll(Model) {
   return results;
 }
 
-async function getChildren(record, allContainers, allPhysicals) {
+async function getChildren(record, allContainers, allPhysicals, cTotal, pTotal) {
   try {
+
     // filter all containers into children of record
     let containers = [];
     for(let i = 0; i < allContainers.length; i++){
@@ -194,7 +195,8 @@ async function getChildren(record, allContainers, allPhysicals) {
       let containerChildOfLab = container.parent === null;
       let containerMatchesParent = containerChildOfLab ? String(container.lab._id) === String(record._id) : String(container.parent._id) === String(record._id);
       if (containerMatchesParent) {
-        container.children = await getChildren(container, allContainers, allPhysicals);
+        cTotal += 1;
+        container.children = await getChildren(container, allContainers, allPhysicals, cTotal, pTotal);
         containers.push(container);
       }
     }
@@ -205,6 +207,7 @@ async function getChildren(record, allContainers, allPhysicals) {
       let physical = allPhysicals[i];
       if (physical.parent !== null) {
         if (String(physical.parent._id) === String(record._id)) {
+          pTotal += 1;
           physicals.push(physical);
         }
       }
@@ -212,7 +215,9 @@ async function getChildren(record, allContainers, allPhysicals) {
 
     let result = { 
       'containers': containers, 
-      'physicals': physicals 
+      'physicals': physicals,
+      'pTotal': pTotal,
+      'cTotal': cTotal 
     };
     return result;
   } catch (error) {
