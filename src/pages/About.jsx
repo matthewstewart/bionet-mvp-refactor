@@ -1,33 +1,28 @@
 import React, { Component } from 'react';
-import MessageCard from '../components/MessageCard';
-import Debug from '../components/Debug';
-import { ContainerFluid, Row, Column } from '../components/Bootstrap';
+import { ContainerFluid, Row, Column, Card, CardHeader, CardTitle, CardBody, CardText } from '../components/Bootstrap';
+import FadeIn from 'react-fade-in';
 
 class About extends Component {
   
   render() {
-    const debuggingMode = this.props.debuggingMode && this.props.debuggingMode === true;
     return (
-      <div className="Landing pt-3">
-        <ContainerFluid>
-          <Row>
-            <Column col="12" colLg="4">
-              <MessageCard title="About" iconClass="information">
-                This is the about page found at ./src/pages/About.jsx
-              </MessageCard>
-            </Column>
-          </Row>
-        </ContainerFluid>
-
-        {(debuggingMode) ? (
-          <Debug 
-            componentName="About"
-            componentProps={this.props}
-            componentState={this.state}
-          />
-        ) : null }
-        
-      </div>
+      <ContainerFluid className="About">  
+        <Row className="justify-content-lg-center">
+          <Column col="12" colLg="5" colXl="4">
+            <FadeIn>
+              <Card className="mb-3 text-center mt-3">
+                <CardHeader dark className="bg-dark-green">
+                  <CardTitle>Bionet</CardTitle>
+                </CardHeader>
+                <CardBody>
+                  <CardTitle className="mb-2"><strong>Open Source Biological Inventory Management</strong></CardTitle>
+                  <CardText>Welcome to BioNet. Keep track of your stuff, find what you need, and share as you like. The BioNet supports searching for biological material across multiple labs — all your inventory information is controlled locally by you. You decide if others can see what you wish to share. All BioNet software and associated materials are open source and free to use.</CardText>
+                </CardBody>
+              </Card>
+            </FadeIn>
+          </Column>
+        </Row>
+      </ContainerFluid>
     );
   }
 

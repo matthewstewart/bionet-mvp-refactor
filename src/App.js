@@ -28,7 +28,7 @@ class App extends Component {
       loadSuccess: false,
       error: {},
       appReady: false,
-      debuggingMode: true,
+      debuggingMode: false,
       isLoggedIn: false,
       currentUser: {},
       selectedRecord: {},

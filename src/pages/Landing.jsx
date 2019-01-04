@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { ContainerFluid, Row, Column } from '../components/Bootstrap';
-import FadeIn from 'react-fade-in'
+import FadeIn from 'react-fade-in';
 
 //import MessageCard from '../components/MessageCard';
 //import Debug from '../components/Debug';
