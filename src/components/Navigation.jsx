@@ -115,19 +115,21 @@ class Navigation extends Component {
                   <i className="mdi text-lg mdi-information mr-1" />About
                 </NavbarDropdownLink>
 
-                <NavbarDropdownLink to="/sandbox">
-                  <i className="mdi text-lg mdi-information mr-1" />Sandbox
-                </NavbarDropdownLink>
-              
-             
-                <div 
-                  className="dropdown-item" 
-                  onClick={this.props.toggleDebuggingMode}
-                >
-                  <i className="mdi text-lg mdi-bug mr-1" />
-                  {this.props.debuggingMode ? "Turn Off Debug Console" : "Turn On Debug Console"}
-                </div>
+                {currentUser.isAdmin && (
+                  <>
+                    <NavbarDropdownLink to="/sandbox">
+                      <i className="mdi text-lg mdi-information mr-1" />Sandbox
+                    </NavbarDropdownLink>
                 
+                    <div 
+                      className="dropdown-item" 
+                      onClick={this.props.toggleDebuggingMode}
+                    >
+                      <i className="mdi text-lg mdi-bug mr-1" />
+                      {this.props.debuggingMode ? "Turn Off Debug Console" : "Turn On Debug Console"}
+                    </div>
+                  </>
+                )}  
               </NavbarDropdown>  
 
             </>

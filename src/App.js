@@ -18,8 +18,7 @@ import About from './pages/About';
 import UserProfile from './pages/UserProfile';
 import Sandbox from './pages/Sandbox';
 import ErrorPage from './pages/ErrorPage';
-
-//import FadeIn from 'react-fade-in';
+import Footer from './components/Footer';
 
 class App extends Component {
   
@@ -126,6 +125,7 @@ class App extends Component {
             </>
           ) : (<ErrorPage />)}  
         </main>
+        <Footer />
       </div>
     );
   }
