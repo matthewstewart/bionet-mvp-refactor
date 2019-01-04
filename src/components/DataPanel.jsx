@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { Card, CardHeader, CardTitle, CardBody, CardText } from '../components/Bootstrap';
 
 import PanelTitle from '../components/PanelTitle';
@@ -13,47 +14,67 @@ class DataPanel extends Component {
   
   render() {
     const appReady = this.props.appReady === true;
-    const hasSelectedRecord = this.props.selectedRecord && Object.keys(this.props.selectedRecord).length > 0;
+    const selectedRecord = this.props.selectedRecord;
+    const hasSelectedRecord = selectedRecord && Object.keys(selectedRecord).length > 0;
+    //const modelType = hasSelectedRecord ? selectedRecord.type : this.props.modelType;
+    const isListMode = this.props.action === 'List';
+    //const isViewMode = this.props.action === 'View';
+    // const isEditMode = this.props.action === 'Edit';
+    // const isDeleteMode = this.props.action === 'Delete';
+    const createdAt = new Date(selectedRecord.createdAt);
     return (
       <Card className="DataPanel mt-3">
-          { appReady ? (
-            <>
-              {hasSelectedRecord ? (
-                <CardHeader dark>
-                  <CardTitle>
-                    <PanelTitle 
-                      icon={this.props.selectedRecord.icon} 
-                      title={this.props.selectedRecord.name}
-                      view={this.props.view}
-                      action={this.props.action}
-                    />              
-                  </CardTitle>
-                </CardHeader>
-              ) : (
-                <CardHeader dark>
-                  <CardTitle>
-                    <PanelTitle 
-                      icon={'search-web'} 
-                      title={'Search Bionet'}
-                      view={this.props.view}
-                      action={this.props.action}
-                    />              
-                  </CardTitle>
-                </CardHeader>                
-              )}  
-            </>  
-          ) : (
-            <CardHeader dark>
-              <CardTitle>
-                <PanelTitle icon="timer-sand" title="Loading..."/>
-              </CardTitle>
-            </CardHeader>
-          )}
-        <Search {...this.props}/>
-        
-        {hasSelectedRecord && (
-          <CardBody><pre>{JSON.stringify(this.props.selectedRecord, null, 2)}</pre></CardBody>
+        { appReady ? (
+          <>
+            
+
+            {!isListMode && (
+              <>
+                {hasSelectedRecord ? (
+                  <>
+                    <CardHeader dark>
+                      <CardTitle>
+                        <PanelTitle 
+                          icon={selectedRecord.icon} 
+                          title={selectedRecord.name}
+                          view={this.props.view}
+                          action={this.props.action}
+                        />
+                      </CardTitle>
+                    </CardHeader>
+                    <Search {...this.props}/>
+                    <CardBody>
+                      {createdAt && <small>created {moment(createdAt).calendar().toLowerCase()} by {selectedRecord.createdBy.username}</small>}
+                      {selectedRecord.description && <CardText className="mt-3">{selectedRecord.description}</CardText>}
+                    </CardBody>
+                  </>    
+                ) : (
+                  <>
+                    <CardHeader dark>
+                      <CardTitle>
+                        <PanelTitle 
+                          icon={'search-web'} 
+                          title={'Search Bionet'}
+                          view={this.props.view}
+                          action={this.props.action}
+                        />   
+                      </CardTitle>
+                    </CardHeader>
+                    <Search {...this.props}/>
+                  </>  
+                )}
+              </>
+            )}
+
+          </>  
+        ) : (
+          <CardHeader dark>
+            <CardTitle>
+              <PanelTitle icon="timer-sand" title="Loading..."/>
+            </CardTitle>
+          </CardHeader>
         )}
+        
         
       </Card>
     );

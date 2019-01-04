@@ -36,7 +36,7 @@ class App extends Component {
       records: [],
       selectedRecord: {},
       action: "View",
-      modelType: "",
+      modelType: "Lab",
       view: "Grid"
     };
     this.setRecords = this.setRecords.bind(this);
@@ -87,12 +87,14 @@ class App extends Component {
         default:
           // nothing  
       }
+
       selectedRecord['endpoint'] = endpoint;
       Api.get(`${endpoint}/${selectedRecord._id}`)
       .then((result) => {
         let fullSelectedRecord = result.data;
         fullSelectedRecord['icon'] = selectedRecord.icon;
         fullSelectedRecord['type'] = selectedRecord.type;
+        fullSelectedRecord['label'] = selectedRecord.label;
         fullSelectedRecord['endpoint'] = endpoint;
         this.setState({ 
           selectedRecord: fullSelectedRecord,
@@ -107,8 +109,8 @@ class App extends Component {
     }  
   }
 
-  setAction(newAction) {
-    this.setState({ action: newAction });
+  setAction(newAction, modelType) {
+    this.setState({ action: newAction, modelType });
   }
 
   setView(newView) {
@@ -160,6 +162,7 @@ class App extends Component {
           debuggingMode={this.state.debuggingMode}
           selectedRecord={this.state.selectedRecord}
           toggleDebuggingMode={this.toggleDebuggingMode}
+          setSelectedRecord={this.setSelectedRecord}
         />
         <main className="viewport-container">
           <>

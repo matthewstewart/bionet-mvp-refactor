@@ -7,7 +7,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import shortid from 'shortid';
-import { Navbar, NavbarBrand, NavbarToggle, NavbarNav, NavbarDropdown, NavbarDropdownLink, NavbarLink } from './Bootstrap';
+import { Navbar, NavbarBrand, NavbarToggle, NavbarNav, NavbarDropdown, NavbarDropdownLink, NavbarLink, Button } from './Bootstrap';
 import logo from '../images/bionet-logo.png';
 
 import LoginForm from './LoginForm';
@@ -15,18 +15,37 @@ import SignupForm from './SignupForm';
 
 class Navigation extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.onLabLinkClick = this.onLabLinkClick.bind(this);
+  }
+
+  onLabLinkClick(e) {
+    e.preventDefault();
+    let labs = this.props.labs;
+    let labIndex = e.target.getAttribute('index');
+    let lab = labs[Number(labIndex)];
+    this.props.setSelectedRecord(lab);
+  }
+
   render() {
     const appReady = this.props.appReady === true;
     const isLoggedIn = this.props.isLoggedIn;
-    const selectRecordExists = this.props.selectedRecord && Object.keys(this.props.selectedRecord).length > 0;
+    //const selectRecordExists = this.props.selectedRecord && Object.keys(this.props.selectedRecord).length > 0;
     const currentUser = this.props.currentUser;
     const userDropdownLabel = isLoggedIn && appReady ? currentUser.username : "Loading...";
 
-    const labLinks = this.props.labs.map((lab) => {
+    const labLinks = this.props.labs.map((lab, labIndex) => {
       return (
-        <NavbarDropdownLink key={shortid.generate()} to={`/labs/${lab._id}`}>
-          <i className={`mdi text-lg mdi-teach mr-1`} />{lab.name}
-        </NavbarDropdownLink>
+        <Button 
+          key={shortid.generate()}
+          className="dropdown-item" 
+          onClick={this.onLabLinkClick} 
+          index={labIndex}
+        >
+          <i className={`mdi text-lg mdi-teach mr-1`} index={labIndex}/>{lab.name}
+        </Button>
       );
     });
 
@@ -94,14 +113,13 @@ class Navigation extends Component {
                 </>
               )}
 
-              {isLoggedIn && selectRecordExists ? (
+              {/* {isLoggedIn && selectRecordExists ? (
                 <NavbarDropdown 
                   id="record-dropdown" 
                   label={this.props.selectedRecord.name}
                   className="text-light"
                   icon={this.props.selectedRecord.icon}
                 >
-                  {/* ToDo: Set Modes For Model With Button Click Event  */}
                   <button 
                     className="dropdown-item"
                     onClick={() => { alert('This should change the data panel to \'Profile\' mode.') }}
@@ -115,7 +133,7 @@ class Navigation extends Component {
                     <i className="mdi mdi-pencil mr-2"/>Edit
                   </button>
                 </NavbarDropdown>                
-              ) : null }
+              ) : null } */}
 
               <NavbarDropdown 
                 id="info-dropdown" 

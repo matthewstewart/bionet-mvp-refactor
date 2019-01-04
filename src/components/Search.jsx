@@ -23,6 +23,7 @@ class Search extends Component {
       for(let i = 0; i < labsResponse.data.length; i++){
         labsResponse.data[i]['type'] = 'Lab';
         labsResponse.data[i]['icon'] = 'teach';
+        labsResponse.data[i]['label'] = `${labsResponse.data[i].name}`;
       }
       const labs = labsResponse.data;
       records = records.concat(labsResponse.data);
@@ -32,6 +33,7 @@ class Search extends Component {
       for(let i = 0; i < containersResponse.data.length; i++){
         containersResponse.data[i]['type'] = 'Container';
         containersResponse.data[i]['icon'] = 'grid';
+        containersResponse.data[i]['label'] = `${containersResponse.data[i].lab.name} / ${containersResponse.data[i].name}`;
       }
       const containers = containersResponse.data;
       records = records.concat(containersResponse.data);
@@ -40,6 +42,7 @@ class Search extends Component {
       for(let i = 0; i < physicalsResponse.data.length; i++){
         physicalsResponse.data[i]['type'] = 'Physical';
         physicalsResponse.data[i]['icon'] = 'flask';
+        physicalsResponse.data[i]['label'] = `${physicalsResponse.data[i].lab.name} / ${physicalsResponse.data[i].name}`;
       }
       const physicals = physicalsResponse.data;
       records = records.concat(physicalsResponse.data);
@@ -48,6 +51,7 @@ class Search extends Component {
       for(let i = 0; i < virtualsResponse.data.length; i++){
         virtualsResponse.data[i]['type'] = 'Virtual';
         virtualsResponse.data[i]['icon'] = 'dna';
+        virtualsResponse.data[i]['label'] = `${virtualsResponse.data[i].name}`;
       }
       const virtuals = virtualsResponse.data;
       records = records.concat(virtualsResponse.data);
@@ -87,23 +91,24 @@ class Search extends Component {
   }
 
   render() {
+    //const selectedRecord = this.props.selectedRecord;
+    //const hasSelectedRecord = selectedRecord && Object.keys(selectedRecord).length > 0;
     return (
       <div className="Search">
-        <Typeahead
-          labelKey={(option) => {
-            let isLab = option.type === 'Lab';
-            let isContainer = option.type === 'Container';
-            let isPhysical = option.type === 'Physical';
-            let isVirtual = option.type === 'Virtual';
-            let label = isLab || isVirtual ? `${option.name}` : isContainer ? `${option.lab.name} / ${option.name}` : isPhysical ? `${option.lab.name} / ${option.name}` : null;
-            return label; 
-          }}
-          name="search"
-          placeholder="<enter search here>"
-          className="border-0"
-          options={this.props.records}
-          onChange={(selected) => { this.onChange(selected) }}
-        />
+        {this.props.records && (
+          <Typeahead
+            labelKey={(option) => {
+              // console.log('option.label', option)
+              return option.label; 
+            }}
+            name="search"
+            placeholder="<enter search here>"
+            className="border-0"
+            //selected={hasSelectedRecord ? selectedRecord : null}
+            options={this.props.records}
+            onChange={(selected) => { this.onChange(selected) }}
+          />
+        )}
       </div>
     );
   }
