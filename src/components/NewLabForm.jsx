@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Api from '../modules/Api';
 import { Row, Column, Form, InputText, InputTextArea, InputNumber, Button, ButtonGroup } from '../components/Bootstrap';
 import FadeIn from 'react-fade-in';
+import PreviewGrid from './PreviewGrid';
 
 class NewLabForm extends Component {
 
@@ -12,22 +13,24 @@ class NewLabForm extends Component {
       form: {
         name: "",
         description: "",
-        width: 3,
-        height: 3,
-        users: [] 
+        innerWidth: 15,
+        innerHeight: 15,
+        children: [],
+        users: [],
+        joinRequests: []
       },
       errors: {
         summary: null,
         name: null,
         description: null,
-        width: null,
-        height: null
+        innerWidth: null,
+        innerHeight: null
       },
       instructions: {
         name: null,
         description: null,
-        width: null,
-        height: null
+        innerWidth: "The inner width of the Lab.",
+        innerHeight: "The inner height of the Lab."
       }
     };
     this.onInputChange = this.onInputChange.bind(this);
@@ -66,7 +69,9 @@ class NewLabForm extends Component {
       .then((result) => {
         console.log('NewLab.onFormSubmit.Api.post.result', result);
         if (result.success) {
-          //this.setState({ redirect: true });
+          /*********************************************************/
+          /* Insert App.jsx Method To Set Selected Record + Action */
+          /*********************************************************/
         } else {
           // form.username = "";
           // form.password = "";
@@ -92,77 +97,93 @@ class NewLabForm extends Component {
         onSubmit={this.onFormSubmit}
       >
         { appReady && (  
-          <FadeIn>  
-            {this.state.errors.summary && (
-              <div className="form-group">
-                <p className="text-danger">{this.state.errors.summary}</p>
-              </div>
-            )}
+          <FadeIn>
+            <Row>  
+              {/* Left Side Of Card Body Containing Form */}
+              <Column col="12" colLg="6">
+                {this.state.errors.summary && (
+                  <div className="form-group">
+                    <p className="text-danger">{this.state.errors.summary}</p>
+                  </div>
+                )}
             
-            <InputText 
-              label="Name"
-              attribute="name"
-              placeholder="Lab Name"
-              value={this.state.form.name}
-              onChange={this.state.onInputChange} 
-              instructions={this.state.instructions.name}
-              error={this.state.errors.name}
-            />
-            <InputTextArea 
-              label="Description"
-              attribute="description"
-              placeholder="A short description of the Lab."
-              value={this.state.form.description}
-              onChange={this.state.onInputChange} 
-              instructions={this.state.instructions.description}
-              error={this.state.errors.description}
-            />
-            <Row>
-              <Column col="12" colLg="6">
-                <InputNumber 
-                  label="Width"
-                  attribute="width"
-                  value={this.state.form.width}
-                  onChange={this.state.onInputChange} 
-                  instructions={this.state.instructions.width}
-                  error={this.state.errors.width}
-                  min="1"
-                  max="100"
-                  step="1"
+                <InputText 
+                  label="Name"
+                  attribute="name"
+                  placeholder="Lab Name"
+                  value={this.state.form.name}
+                  onChange={this.onInputChange} 
+                  instructions={this.state.instructions.name}
+                  error={this.state.errors.name}
                 />
-              </Column>
-              <Column col="12" colLg="6">
-                <InputNumber 
-                  label="Height"
-                  attribute="height"
-                  value={this.state.form.height}
-                  onChange={this.state.onInputChange} 
-                  instructions={this.state.instructions.height}
-                  error={this.state.errors.height}
-                  min="1"
-                  max="100"
-                  step="1"
+
+                <InputTextArea 
+                  label="Description"
+                  attribute="description"
+                  placeholder="A short description of the Lab."
+                  value={this.state.form.description}
+                  onChange={this.onInputChange} 
+                  instructions={this.state.instructions.description}
+                  error={this.state.errors.description}
                 />
+
+                <Row>
+                  <Column col="12" colLg="6">
+                    <InputNumber 
+                      label="Inner Width"
+                      attribute="innerWidth"
+                      value={this.state.form.innerWidth}
+                      onChange={this.onInputChange} 
+                      instructions={this.state.instructions.innerWidth}
+                      error={this.state.errors.innerWidth}
+                      min="1"
+                      max="100"
+                      step="1"
+                    />
+                  </Column>
+                  <Column col="12" colLg="6">
+                    <InputNumber 
+                      label="Inner Height"
+                      attribute="innerHeight"
+                      value={this.state.form.innerHeight}
+                      onChange={this.onInputChange} 
+                      instructions={this.state.instructions.innerHeight}
+                      error={this.state.errors.innerHeight}
+                      min="1"
+                      max="100"
+                      step="1"
+                    />
+                  </Column>
+                </Row>
+
+                <Column className="text-center">
+                  <ButtonGroup>
+                    <Button
+                      className="mt-3"
+                      color="secondary"
+                      onClick={this.onCancel}
+                    >
+                      <i className="mdi mdi-cancel mr-1" />Cancel
+                    </Button>
+                    <Button
+                      className="mt-3"
+                      color="success"
+                      submit
+                    >
+                      <i className="mdi mdi-plus mr-1" />Create Lab
+                    </Button>     
+                  </ButtonGroup>
+                </Column>
+
               </Column>
+
+              {/* Right Side Of Card Body Containing PreviewGrid */}
+              <Column col="12" colLg="6" style={{'overflowX': 'scroll'}}>
+                <label>Lab Preview</label>
+                <PreviewGrid {...this.state} />
+              </Column>              
+
             </Row>  
-            <Column className="text-center">
-              <ButtonGroup>
-                <Button
-                  className="mt-3"
-                  color="secondary"
-                  onClick={this.onCancel}
-                >
-                  <i className="mdi mdi-cancel mr-1" />Cancel
-                </Button>
-                <Button
-                  className="mt-3"
-                  color="success"
-                  submit
-                >
-                  <i className="mdi mdi-plus mr-1" />Create Lab
-                </Button>     
-              </ButtonGroup>
-            </Column>
           </FadeIn>
         )}  
       </Form>

@@ -56,7 +56,7 @@ export const Column = class Column extends Component {
     if (this.props.alignSelf) { classes += ` align-self-${this.props.alignSelf}`}
     if (this.props.className) { classes += ` ${this.props.className}` }
     return (
-      <div className={classes}>
+      <div className={classes} style={this.props.styles}>
         {this.props.children}
       </div>
     );

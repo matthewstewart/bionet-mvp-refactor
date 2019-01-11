@@ -26,6 +26,7 @@ class DataPanel extends Component {
     // const isEditMode = this.props.action === 'Edit';
     // const isDeleteMode = this.props.action === 'Delete';
     const createdAt = new Date(selectedRecord.createdAt);
+    //console.log('selectedRecord', selectedRecord);
     return (
       <Card className="DataPanel mt-3">
         { appReady ? (

@@ -79,7 +79,7 @@ class NewVirtualForm extends Component {
         }  
       });
     } else {
-      if (!nameValid) { errors.name = "You must provide a valid lab name with 4 or more characters." } else { instructions.username = "Name Valid" }
+      if (!nameValid) { errors.name = "You must provide a valid virtual name with 4 or more characters." } else { instructions.username = "Name Valid" }
       this.setState({form, errors, instructions});
     }
   }  
@@ -88,7 +88,7 @@ class NewVirtualForm extends Component {
     const appReady = this.props.appReady === true;
     return (
       <Form 
-        className="NewLabForm"
+        className="NewVirtualForm"
         onSubmit={this.onFormSubmit}
       >
         { appReady && (  
@@ -102,7 +102,7 @@ class NewVirtualForm extends Component {
             <InputText 
               label="Name"
               attribute="name"
-              placeholder="Lab Name"
+              placeholder="Virtual Name"
               value={this.state.form.name}
               onChange={this.state.onInputChange} 
               instructions={this.state.instructions.name}
@@ -111,7 +111,7 @@ class NewVirtualForm extends Component {
             <InputTextArea 
               label="Description"
               attribute="description"
-              placeholder="A short description of the Lab."
+              placeholder="A short description of the Virtual."
               value={this.state.form.description}
               onChange={this.state.onInputChange} 
               instructions={this.state.instructions.description}
@@ -159,7 +159,7 @@ class NewVirtualForm extends Component {
                   color="success"
                   submit
                 >
-                  <i className="mdi mdi-plus mr-1" />Create Lab
+                  <i className="mdi mdi-plus mr-1" />Create Virtual
                 </Button>     
               </ButtonGroup>
             </Column>

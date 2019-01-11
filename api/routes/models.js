@@ -1,6 +1,5 @@
 const Fetch = require('../modules/fetch');
 const ApiAccess = require("../modules/apiAccess");
-const datMiddleware = require('../modules/dat');
 
 module.exports = function(router) {
 

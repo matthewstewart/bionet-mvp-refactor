@@ -1,12 +1,30 @@
 {
   "name": "bionet-mvp",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.0.1",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "start": "serve -s build -l 9001",
+    "dev": "concurrently \"nodemon ./api/server\" \"react-scripts start\"",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "db:save": "node ./api/lib/save.js",
+    "db:clear": "node ./api/lib/clear.js",
+    "db:restore": "node ./api/lib/restore.js",
+    "db:seed": "node ./api/lib/seed.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
-    "concurrently": "^4.1.0",
-    "dat-node": "^3.5.13",
     "express": "^4.16.4",
     "express-bearer-token": "^2.2.0",
     "jsonwebtoken": "^8.4.0",
@@ -20,27 +38,12 @@
     "react-dom": "^16.7.0",
     "react-fade-in": "^0.1.6",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.2",
+    "react-scripts": "^2.1.3",
     "shortid": "^2.2.14"
   },
-  "scripts": {
-    "start": "serve -s build -l 9001",
-    "dev": "concurrently \"nodemon ./api/server\" \"react-scripts start\"",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"    
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
-    "hypercored": "^1.4.1",
-    "nodemon": "^1.18.9"
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.9",
+    "serve": "^10.1.1"
   }
 }

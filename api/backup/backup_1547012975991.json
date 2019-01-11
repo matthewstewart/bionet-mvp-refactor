@@ -1,0 +1,54 @@
+{
+  "createdAt": 1547012975991,
+  "users": [
+    {
+      "createdAt": "Thu Jan 03 2019 23:10:45 GMT-0800 (Pacific Standard Time)",
+      "updatedAt": "Thu Jan 03 2019 23:10:45 GMT-0800 (Pacific Standard Time)",
+      "isAdmin": true,
+      "imageUrl": "",
+      "datKey": "",
+      "_id": "5c2f090aff150a2a08547dee",
+      "username": "mstewart",
+      "password": "$2a$10$E5kvrwFvFSwg2t3xwwtecu1G/JfFVsbeJjfE4U5mPPa4p57OCMqsq",
+      "email": "matthew.stewart.mi@gmail.com",
+      "name": "Matthew Stewart",
+      "__v": 0
+    },
+    {
+      "createdAt": "Thu Jan 03 2019 23:51:17 GMT-0800 (Pacific Standard Time)",
+      "updatedAt": "Thu Jan 03 2019 23:51:17 GMT-0800 (Pacific Standard Time)",
+      "isAdmin": false,
+      "imageUrl": "",
+      "datKey": "",
+      "_id": "5c2f113abb07ad1a8862faad",
+      "username": "demouser",
+      "password": "$2a$10$/z4/aubpptYuJwQz2mbtzubyR/BFdCQfiFd8mIxdhpLFBPGgmlEYK",
+      "email": "demouser@example.com",
+      "name": "Demo User",
+      "__v": 0
+    }
+  ],
+  "labs": [
+    {
+      "createdAt": "Mon Jan 07 2019 18:27:01 GMT-0800 (Pacific Standard Time)",
+      "updatedAt": "Mon Jan 07 2019 18:27:01 GMT-0800 (Pacific Standard Time)",
+      "description": "",
+      "innerWidth": 15,
+      "innerHeight": 15,
+      "users": [
+        "5c2f090aff150a2a08547dee"
+      ],
+      "joinRequests": [],
+      "datKey": "",
+      "_id": "5c34e4866ffddb349c4d3915",
+      "name": "MattLab",
+      "children": [],
+      "createdBy": "5c2f090aff150a2a08547dee",
+      "updatedBy": "5c2f090aff150a2a08547dee",
+      "__v": 0
+    }
+  ],
+  "containers": [],
+  "physicals": [],
+  "virtuals": []
+}

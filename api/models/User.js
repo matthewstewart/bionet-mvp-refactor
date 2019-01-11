@@ -1,38 +1,19 @@
-'use strict'
+"use strict";
 
 const mongoose = require('mongoose');
 const moment   = require('moment');
 const bcrypt   = require('bcryptjs');
 
 const userSchema = mongoose.Schema({
-	createdAt : { type: String, default: new Date() },
-	updatedAt : { type: String, default: new Date() },
-	isAdmin   : { type: Boolean, default: false },
-	username  : { type: String, required: true, index: { unique: true }},
-	password  : String,
-	name: { type: String, required: true },
-	email: { type: String, required: true, index: { unique: true }},
-	imageUrl: String,
-	settings: {
-		display: { 
-			mode: { type: String, default: 'simple' }
-		},
-		privacy: {
-			username: {
-				public : { type: Boolean, default: false },
-				members: { type: Boolean, default: false }
-			},
-			name: {
-				public : { type: Boolean, default: true },
-				members: { type: Boolean, default: true }
-			},
-			email: {
-				public : { type: Boolean, default: true },
-				members: { type: Boolean, default: true }
-			}
-		}
-	},
-	datKey: String
+	createdAt    : { type: String, default: new Date() },
+	updatedAt    : { type: String, default: new Date() },
+	isAdmin      : { type: Boolean, default: false },
+	username     : { type: String, required: true, index: { unique: true }},
+	password     : String,
+	name         : { type: String, required: true },
+	email        : { type: String, required: true, index: { unique: true }},
+	imageUrl     : { type: String, default: "" },
+  datKey       : { type: String, default: "" }
 });
 
 userSchema.methods.comparePassword = function(password, callback) {

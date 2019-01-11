@@ -33,7 +33,12 @@ class Search extends Component {
       for(let i = 0; i < containersResponse.data.length; i++){
         containersResponse.data[i]['type'] = 'Container';
         containersResponse.data[i]['icon'] = 'grid';
-        containersResponse.data[i]['label'] = `${containersResponse.data[i].lab.name} / ${containersResponse.data[i].name}`;
+        let label = `${containersResponse.data[i].lab.name}`;
+        console.log(`container ${i + 1}`, containersResponse.data[i].breadcrumbs);
+        for(let j = 0; j < containersResponse.data[i].breadcrumbs.length; j++){
+          label += ` / ${containersResponse.data[i].breadcrumbs[j].name}`;
+        }
+        containersResponse.data[i]['label'] = label;
       }
       const containers = containersResponse.data;
       records = records.concat(containersResponse.data);

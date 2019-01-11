@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 const mongoose = require('mongoose');
 
@@ -8,10 +8,10 @@ const modelSchema = mongoose.Schema({
   updatedAt    : { type: String, default: new Date() },
   updatedBy    : { type: String, ref: "User", required: true },
   name         : { type: String, required: true },
-  width        : { type: Number, default: 1, min: 1 },
-  height       : { type: Number, default: 1, min: 1 },
-  description  : String,
-  children     : Object,
+  description  : { type: String, default: "" },
+  innerWidth   : { type: Number, default: 1, min: 1 },
+  innerHeight  : { type: Number, default: 1, min: 1 },
+  children     : { type: Object, default: {} },
   users        : [{ type: String, ref: "User"}],
   joinRequests : [{ type: String, ref: "User"}],
   datKey       : { type: String, default: "" }
@@ -19,3 +19,5 @@ const modelSchema = mongoose.Schema({
 
 
 module.exports = mongoose.model('Lab', modelSchema);
+
+ 

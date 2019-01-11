@@ -4,9 +4,13 @@ const Container = require("../models/Container");
 const Physical = require("../models/Physical");
 const Virtual = require("../models/Virtual");
 
+let breadcrumbArray = [];
+
 const mongoFetch = {
   fetchAll: async (Model) => {
     let results;
+    let allContainers = await getAll(Container);
+    let allPhysicals = await getAll(Physical);
     switch (Model) {
       case Lab:
         results = await Model.find()
@@ -26,6 +30,13 @@ const mongoFetch = {
           path: 'joinRequests',
           select: '_id username'
         });
+        for(let i = 0; i < results.length; i++) {
+          breadcrumbArray = [];
+          results[i]['breadcrumbs'] = await getBreadcrumbs(results[i]._id);
+          results[i]['children'] = await getChildren(results[i], allContainers, allPhysicals, 0, 0);
+          results[i]['type'] = 'Lab';
+          results[i]['endpoint'] = 'labs';
+        }
         break;
       case Container:
         results = await Model.find()
@@ -45,6 +56,14 @@ const mongoFetch = {
           path: 'lab',
           select: '_id name'
         });
+        for(let i = 0; i < results.length; i++) {
+          breadcrumbArray = [];
+          results[i]['breadcrumbs'] = await getBreadcrumbs(results[i]._id);
+          results[i]['children'] = await getChildren(results[i], allContainers, allPhysicals, 0, 0);
+          results[i]['type'] = 'Container';
+          results[i]['endpoint'] = 'containers';
+        }
+        break;
       case Physical:
         results = await Model.find()
         .populate({
@@ -63,7 +82,13 @@ const mongoFetch = {
           path: 'lab',
           select: '_id name'
         })
-        .populate('virtual');  
+        .populate('virtual');
+        for(let i = 0; i < results.length; i++) {
+          breadcrumbArray = [];
+          results[i]['breadcrumbs'] = await getBreadcrumbs(results[i]._id);
+          results[i]['type'] = 'Physical';
+          results[i]['endpoint'] = 'physicals';
+        }  
         break; 
       case Virtual:
         results = await Model.find()
@@ -75,9 +100,17 @@ const mongoFetch = {
           path: 'updatedBy',
           select: '_id username'
         });  
+        for(let i = 0; i < results.length; i++) {
+          results[i]['type'] = 'Virtual';
+          results[i]['endpoint'] = 'virtuals';
+        } 
         break; 
       case User:
-        results = await Model.find().select({ password: 0, email: 0, name: 0, settings: 0});  
+        results = await Model.find().select({ password: 0, email: 0, name: 0, settings: 0});
+        for(let i = 0; i < results.length; i++) {
+          results[i]['type'] = 'User';
+          results[i]['endpoint'] = 'users';
+        }   
         break;      
       default:
         results = null;
@@ -110,9 +143,12 @@ const mongoFetch = {
             select: '_id username'
           });
           result['children'] = await getChildren(result, allContainers, allPhysicals, 0, 0);
+          result['type'] = 'Lab';
+          result['endpoint'] = 'labs';
           break;
         case Container:
-          result = await Model.findOne({_id: id}).populate({
+          result = await Model.findOne({_id: id})
+          .populate({
             path: 'parent',
             select: '_id name'
           })
@@ -129,6 +165,10 @@ const mongoFetch = {
             select: '_id name'
           });
           result['children'] = await getChildren(result, allContainers, allPhysicals, 0, 0);
+          breadcrumbArray = [];
+          result['breadcrumbs'] = await getBreadcrumbs(result._id);
+          result['type'] = 'Container';
+          result['endpoint'] = 'containers';
           break;  
         case Physical:
           result = await Model.findOne({_id: id}).populate({
@@ -147,7 +187,11 @@ const mongoFetch = {
             path: 'lab',
             select: '_id name'
           })
-          .populate('virtual');  
+          .populate('virtual'); 
+          breadcrumbArray = [];
+          result['breadcrumbs'] = await getBreadcrumbs(result._id);
+          result['type'] = 'Physical';
+          result['endpoint'] = 'physicals'; 
           break;  
         case Virtual:
           result = await Model.findOne({_id: id})
@@ -159,9 +203,13 @@ const mongoFetch = {
             path: 'updatedBy',
             select: '_id username'
           });  
+          result['type'] = 'Virtual';
+          result['endpoint'] = 'virtuals';
           break;  
         case User:
           result = await Model.findOne({_id: id}).select({ password: 0, email: 0, name: 0, settings: 0});  
+          result['type'] = 'User';
+          result['endpoint'] = 'users';
           break;       
         default:
           result = null;
@@ -260,7 +308,7 @@ async function getChildren(record, allContainers, allPhysicals, cTotal, pTotal) 
     let containers = [];
     for(let i = 0; i < allContainers.length; i++){
       let container = allContainers[i];
-      let containerChildOfLab = container.parent === null;
+      let containerChildOfLab = Object.keys(container).indexOf('parent') === -1;
       let containerMatchesParent = containerChildOfLab ? String(container.lab._id) === String(record._id) : String(container.parent._id) === String(record._id);
       if (containerMatchesParent) {
         cTotal += 1;
@@ -273,7 +321,7 @@ async function getChildren(record, allContainers, allPhysicals, cTotal, pTotal) 
     let physicals = [];
     for(let i = 0; i < allPhysicals.length; i++){
       let physical = allPhysicals[i];
-      if (physical.parent !== null) {
+      if (physical.parent !== "") {
         if (String(physical.parent._id) === String(record._id)) {
           pTotal += 1;
           physicals.push(physical);
@@ -284,11 +332,48 @@ async function getChildren(record, allContainers, allPhysicals, cTotal, pTotal) 
     let result = { 
       'containers': containers, 
       'physicals': physicals,
-      'pTotal': pTotal,
-      'cTotal': cTotal 
+      'totalPhysicalsCount': pTotal,
+      'totalContainersCount': cTotal 
     };
     return result;
   } catch (error) {
     console.log(error);
+  }
+}
+
+async function getBreadcrumbs(recordId) {
+  try {
+    let type = 'Container';
+    let record = await Container.findOne({_id: recordId}).populate('parent').populate('lab');
+    if (!record) {
+      //console.log(`container with id of ${recordId} not found`);
+      type = 'Physical'; 
+      record = await Physical.findOne({_id: recordId}).populate('parent').populate('lab'); 
+      if (!record) { 
+        //console.log(`physical with id of ${recordId} not found`); 
+        type = 'Lab';
+        record = await Lab.findOne({_id: recordId});
+        if (!record) { console.log(`lab with id of ${recordId} not found`); }
+      }
+    }
+
+    let recordExists = record && Object.keys(record._doc).length > 0;
+    //console.log('recordExists', recordExists);
+    //console.log('record.type', type);
+    //record.parent && console.log('record.parent', record.parent);
+    //console.log(record);
+    let parentAttrExists = Object.keys(record._doc).indexOf('parent') > -1;
+    let recordParentExists = recordExists && parentAttrExists && Object.keys(record.parent).length > 0;
+    breadcrumbArray.unshift(record);
+    if (parentAttrExists) { 
+      console.log('parentAttrExists');
+      
+      await getBreadcrumbs(record.parent._id);
+    }
+    //console.log('breadcrumbArray', breadcrumbArray.length)
+    return breadcrumbArray;  
+  } catch (error) {
+    console.error(error);
+    throw error;  
   }
 }
